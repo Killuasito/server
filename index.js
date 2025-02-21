@@ -62,22 +62,27 @@ app.use(
 
 console.log("Tentando conectar ao MongoDB em:", MONGODB_URI);
 
+mongoose.set("debug", true); // Adicionar isso antes da conexão para ver mais detalhes
+
 mongoose
   .connect(MONGODB_URI, {
-    serverSelectionTimeoutMS: 30000,
-    socketTimeoutMS: 45000,
-    ssl: true,
+    serverSelectionTimeoutMS: 5000,
     retryWrites: true,
     w: "majority",
-    authSource: "admin",
   })
-  .then(() => console.log("Conectado ao MongoDB Atlas"))
+  .then(() => {
+    console.log("Conectado ao MongoDB Atlas");
+    console.log("Database:", mongoose.connection.name);
+    console.log("Host:", mongoose.connection.host);
+  })
   .catch((err) => {
     console.error("Erro detalhado ao conectar:", {
       name: err.name,
       message: err.message,
       code: err.code,
       codeName: err.codeName,
+      database: mongoose.connection.name,
+      host: mongoose.connection.host,
     });
     process.exit(1);
   });
