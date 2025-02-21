@@ -4,7 +4,9 @@
   "main": "server.js",
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "docker:build": "docker build -t umano-server .",
+    "docker:run": "docker run -p 3001:3001 umano-server"
   },
   "keywords": [],
   "author": "",
