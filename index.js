@@ -27,6 +27,9 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 
+// Adicionar esta linha para servir arquivos estáticos da pasta public
+app.use(express.static(path.join(__dirname, "public")));
+
 // Configure static file serving
 app.use(
   "/uploads",
@@ -38,11 +41,16 @@ app.use(
   })
 );
 
-const MONGODB_URI = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/timo";
+const MONGODB_URI = process.env.MONGODB_URI;
 
 mongoose
-  .connect(MONGODB_URI)
-  .then(() => console.log("Conectado ao MongoDB"))
+  .connect(MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    serverSelectionTimeoutMS: 5000,
+    retryWrites: true,
+  })
+  .then(() => console.log("Conectado ao MongoDB Atlas"))
   .catch((err) => console.error("Erro ao conectar ao MongoDB:", err));
 
 // Adicionar antes das outras rotas

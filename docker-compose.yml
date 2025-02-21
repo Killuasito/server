@@ -1,0 +1,14 @@
+version: "3.8"
+
+services:
+  api:
+    build: .
+    ports:
+      - "3001:3001"
+    environment:
+      - MONGODB_URI=${MONGODB_URI}
+    volumes:
+      - ./uploads:/usr/src/app/uploads
+
+volumes:
+  uploads:
