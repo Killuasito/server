@@ -18,7 +18,7 @@ if (!fs.existsSync(uploadsDir)) {
 
 // Update CORS configuration
 const corsOptions = {
-  origin: process.env.CLIENT_URL || "http://localhost:3000",
+  origin: process.env.RAILWAY_STATIC_URL || "http://localhost:3000",
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
@@ -56,4 +56,6 @@ app.use("/api/chat", require("./routes/chat"));
 app.use("/api/upload", uploadRouter);
 
 const port = process.env.PORT || 3001;
-app.listen(port, () => console.log(`Server running on port ${port}`));
+app.listen(port, "0.0.0.0", () =>
+  console.log(`Server running on port ${port}`)
+);
