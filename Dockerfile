@@ -2,6 +2,9 @@ FROM node:18-alpine
 
 WORKDIR /usr/src/app
 
+# Copiar env primeiro
+COPY .env ./
+
 # Copiar package.json e package-lock.json
 COPY package*.json ./
 
