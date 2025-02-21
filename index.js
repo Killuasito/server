@@ -45,6 +45,9 @@ mongoose
   .then(() => console.log("Conectado ao MongoDB"))
   .catch((err) => console.error("Erro ao conectar ao MongoDB:", err));
 
+// Adicionar antes das outras rotas
+app.use("/", require("./routes/index"));
+
 // Rotas
 app.use("/api/memories", require("./routes/memories"));
 app.use("/api/gallery", require("./routes/gallery"));
