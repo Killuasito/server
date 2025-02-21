@@ -1,49 +1,28 @@
 const express = require("express");
 const router = express.Router();
-const Chat = require("../models/Chat");
+const Message = require("../models/Message");
 
+// Buscar mensagens
 router.get("/", async (req, res) => {
   try {
-    const chat = await Chat.findOne();
-    if (!chat) {
-      // Se não existir chat, cria um novo
-      const newChat = new Chat({ messages: [] });
-      await newChat.save();
-      return res.json([]);
-    }
-    res.json(chat.messages);
+    const messages = await Message.find().sort({ timestamp: 1 });
+    res.json(messages);
   } catch (error) {
-    console.error("Erro ao buscar mensagens:", error);
     res.status(500).json({ message: error.message });
   }
 });
 
+// Enviar mensagem
 router.post("/", async (req, res) => {
   try {
-    if (!req.body.content || !req.body.sender) {
-      return res
-        .status(400)
-        .json({ message: "Conteúdo e remetente são obrigatórios" });
-    }
-
-    let chat = await Chat.findOne();
-    if (!chat) {
-      chat = new Chat({ messages: [] });
-    }
-
-    const newMessage = {
+    const message = new Message({
       content: req.body.content,
       sender: req.body.sender,
-      timestamp: new Date(),
-    };
-
-    chat.messages.push(newMessage);
-    await chat.save();
-
+    });
+    const newMessage = await message.save();
     res.status(201).json(newMessage);
   } catch (error) {
-    console.error("Erro ao salvar mensagem:", error);
-    res.status(500).json({ message: error.message });
+    res.status(400).json({ message: error.message });
   }
 });
 

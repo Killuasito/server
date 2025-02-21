@@ -37,7 +37,7 @@ if (!fs.existsSync(uploadsDir)) {
 
 // Update CORS configuration
 const corsOptions = {
-  origin: process.env.RAILWAY_STATIC_URL || "http://localhost:3000",
+  origin: "*", // Temporariamente permitir todas as origens
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
@@ -45,6 +45,14 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 app.use(express.json());
+
+// Adicionar essas linhas antes das rotas
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  next();
+});
 
 // Adicionar esta linha para servir arquivos estáticos da pasta public
 app.use(express.static(path.join(__dirname, "public")));
