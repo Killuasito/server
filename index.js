@@ -9,6 +9,13 @@ const fs = require("fs");
 
 dotenv.config();
 
+// Verificar e imprimir variáveis de ambiente no início
+console.log("Ambiente:", {
+  NODE_ENV: process.env.NODE_ENV,
+  PORT: process.env.PORT,
+  MONGODB_URI: process.env.MONGODB_URI ? "Definido" : "Não definido",
+});
+
 if (!process.env.MONGODB_URI) {
   console.error("MONGODB_URI não está definido nas variáveis de ambiente");
   process.exit(1);
