@@ -25,6 +25,7 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
+app.use(express.json());
 
 // Configure static file serving
 app.use(
@@ -36,8 +37,6 @@ app.use(
     },
   })
 );
-
-app.use(express.json());
 
 const MONGODB_URI = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/timo";
 
