@@ -63,10 +63,22 @@ app.use(
 console.log("Tentando conectar ao MongoDB em:", MONGODB_URI);
 
 mongoose
-  .connect(MONGODB_URI)
-  .then(() => console.log("Conectado ao MongoDB em:", MONGODB_URI))
+  .connect(MONGODB_URI, {
+    serverSelectionTimeoutMS: 30000,
+    socketTimeoutMS: 45000,
+    ssl: true,
+    retryWrites: true,
+    w: "majority",
+    authSource: "admin",
+  })
+  .then(() => console.log("Conectado ao MongoDB Atlas"))
   .catch((err) => {
-    console.error("Erro ao conectar ao MongoDB:", err);
+    console.error("Erro detalhado ao conectar:", {
+      name: err.name,
+      message: err.message,
+      code: err.code,
+      codeName: err.codeName,
+    });
     process.exit(1);
   });
 
