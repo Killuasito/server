@@ -8,6 +8,18 @@ const path = require("path");
 const fs = require("fs");
 
 dotenv.config();
+
+if (!process.env.MONGODB_URI) {
+  console.error("MONGODB_URI não está definido nas variáveis de ambiente");
+  process.exit(1);
+}
+
+const MONGODB_URI = process.env.MONGODB_URI;
+console.log("Configuração do MongoDB:", {
+  uri: MONGODB_URI,
+  env: process.env.NODE_ENV,
+});
+
 const app = express();
 
 // Ensure uploads directory exists with absolute path
@@ -41,17 +53,10 @@ app.use(
   })
 );
 
-const MONGODB_URI = process.env.MONGODB_URI;
-
 console.log("Tentando conectar ao MongoDB em:", MONGODB_URI);
 
 mongoose
-  .connect(MONGODB_URI, {
-    serverSelectionTimeoutMS: 10000,
-    socketTimeoutMS: 45000,
-    retryWrites: true,
-    w: "majority",
-  })
+  .connect(MONGODB_URI)
   .then(() => console.log("Conectado ao MongoDB em:", MONGODB_URI))
   .catch((err) => {
     console.error("Erro ao conectar ao MongoDB:", err);
